@@ -17,15 +17,10 @@
 #ifndef _INIT_FIRMWARE_HANDLER_H
 #define _INIT_FIRMWARE_HANDLER_H
 
-#include <string>
-#include <vector>
-
 #include "uevent.h"
 
 namespace android {
 namespace init {
-
-extern std::vector<std::string> firmware_directories;
 
 void HandleFirmwareEvent(const Uevent& uevent);
 

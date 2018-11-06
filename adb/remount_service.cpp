@@ -29,15 +29,12 @@
 
 #include <string>
 
-#include <android-base/file.h>
 #include <android-base/properties.h>
 
 #include "adb.h"
 #include "adb_io.h"
 #include "adb_utils.h"
 #include "fs_mgr.h"
-
-using android::base::Realpath;
 
 // Returns the device used to mount a directory in /proc/mounts.
 static std::string find_proc_mount(const char* dir) {
@@ -46,15 +43,9 @@ static std::string find_proc_mount(const char* dir) {
         return "";
     }
 
-    // dir might be a symlink, e.g., /product -> /system/product in GSI.
-    std::string canonical_path;
-    if (!Realpath(dir, &canonical_path)) {
-        PLOG(ERROR) << "Realpath failed: " << dir;
-    }
-
     mntent* e;
     while ((e = getmntent(fp.get())) != nullptr) {
-        if (canonical_path == e->mnt_dir) {
+        if (strcmp(dir, e->mnt_dir) == 0) {
             return e->mnt_fsname;
         }
     }
